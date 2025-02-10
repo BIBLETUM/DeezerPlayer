@@ -42,16 +42,18 @@ android {
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":domain"))
+
+
     implementation(libs.lottie)
 
     implementation(libs.dagger)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
     kapt(libs.dagger.compiler)
 
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
     implementation(libs.coil.compose)
+
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

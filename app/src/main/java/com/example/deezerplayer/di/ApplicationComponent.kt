@@ -1,7 +1,7 @@
 package com.example.deezerplayer.di
 
 import android.content.Context
-import com.example.deezerplayer.presentation.ViewModelFactory
+import com.example.deezerplayer.ViewModelFactory
 import dagger.BindsInstance
 import dagger.Component
 

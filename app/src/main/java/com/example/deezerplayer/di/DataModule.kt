@@ -1,9 +1,9 @@
 package com.example.deezerplayer.di
 
-import com.example.deezerplayer.data.ChartRepositoryImpl
-import com.example.deezerplayer.data.network.ApiFactory
-import com.example.deezerplayer.data.network.ApiService
-import com.example.deezerplayer.domain.repository.ChartRepository
+import com.example.data.ChartRepositoryImpl
+import com.example.data.network.ApiFactory
+import com.example.data.network.ApiService
+import com.example.domain.repository.ChartRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
