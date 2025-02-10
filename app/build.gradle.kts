@@ -42,7 +42,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.lottie)
+
     implementation(libs.dagger)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
     kapt(libs.dagger.compiler)
 
     implementation(libs.retrofit)

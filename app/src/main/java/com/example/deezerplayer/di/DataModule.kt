@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-fun interface DataModule {
+interface DataModule {
 
     @ApplicationScope
     @Binds

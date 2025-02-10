@@ -23,8 +23,8 @@ class ChartRepositoryImpl @Inject constructor(
 
     init {
         scope.launch {
-            val initialTracks = apiService
-                .getChart().tracks
+            val initialTracks = apiService.getChart().trackList.tracks
+                .filter { it.type == TRACK_TYPE }
                 .map { trackMapper.mapTrackDtoToDomain(it) }
             _tracksFlow.emit(initialTracks)
         }
@@ -35,9 +35,24 @@ class ChartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchTracks(query: String) {
-        val tracks =
-            apiService.searchTracks(query).tracks.map { trackMapper.mapTrackDtoToDomain(it) }
+        val tracks = when (query.length) {
+            0 -> {
+                apiService.getChart().trackList.tracks
+                    .filter { it.type == TRACK_TYPE }
+                    .map { trackMapper.mapTrackDtoToDomain(it) }
+            }
+
+            else -> {
+                apiService.searchTracks(query).dataList
+                    .filter { it.type == TRACK_TYPE }
+                    .map { trackMapper.mapSearchItemTrackToDomain(it) }
+            }
+        }
         _tracksFlow.emit(tracks)
+    }
+
+    private companion object {
+        const val TRACK_TYPE = "track"
     }
 
 }

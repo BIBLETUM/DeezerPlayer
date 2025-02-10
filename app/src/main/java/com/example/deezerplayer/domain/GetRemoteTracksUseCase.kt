@@ -14,6 +14,6 @@ class GetRemoteTracksUseCase @Inject constructor(
 
 }
 
-fun interface IGetRemoteTracksUseCase {
+interface IGetRemoteTracksUseCase {
     operator fun invoke(): Flow<List<Track>>
 }

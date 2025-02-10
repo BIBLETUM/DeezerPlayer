@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -24,22 +23,24 @@ import com.example.deezerplayer.R
 import com.example.deezerplayer.presentation.model.TrackUi
 import com.example.deezerplayer.presentation.theme.nunitoFontFamily
 
-@Preview
 @Composable
 fun TrackCard(
     modifier: Modifier = Modifier,
-    track: TrackUi = TrackUi(),
-    onTrackClick: (TrackUi) -> Unit = {},
+    track: TrackUi,
+    onTrackClick: (TrackUi) -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable {
+                onTrackClick(track) },
         horizontalArrangement = Arrangement.spacedBy(15.dp),
     ) {
         AsyncImage(
             modifier = Modifier
                 .size(88.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .clickable { onTrackClick(track) },
+                .clip(RoundedCornerShape(8.dp)),
             model = track.coverUrl,
             placeholder = painterResource(id = R.drawable.track_image_placeholder),
             error = painterResource(id = R.drawable.track_image_placeholder),
