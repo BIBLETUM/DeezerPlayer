@@ -2,4 +2,9 @@
     <string name="app_name">DeezerPlayer</string>
     <string name="search_tracks">Поиск треков</string>
     <string name="cancel">Отмена</string>
+    <string name="deezer">Deezer</string>
+    <string name="downloaded">Скачанные</string>
+    <string name="media_audio_permission_missing">Отсутствует разрешение на доступ к аудиофайлам</string>
+    <string name="open_settings">Открыть настройки</string>
+    <string name="if_you_gave_permission_try_restarting_the_application">Если вы дали разрешение, попробуйте перезапустить приложение</string>
 </resources>

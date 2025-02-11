@@ -5,7 +5,7 @@ import com.example.data.network.model.TrackDto
 import com.example.domain.Track
 import javax.inject.Inject
 
-class TrackMapper @Inject constructor() {
+class RemoteTrackMapper @Inject constructor() {
 
     fun mapTrackDtoToDomain(dto: TrackDto): Track {
         return Track(
@@ -14,6 +14,7 @@ class TrackMapper @Inject constructor() {
             albumName = dto.album.title,
             artistName = dto.artist.name,
             coverUrl = dto.album.cover,
+            length = dto.duration,
         )
     }
 
@@ -24,6 +25,7 @@ class TrackMapper @Inject constructor() {
             albumName = dto.album.title,
             artistName = dto.artist.name,
             coverUrl = dto.album.cover,
+            length = dto.duration,
         )
     }
 

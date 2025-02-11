@@ -1,7 +1,6 @@
-package com.example.data
+package com.example.data.network
 
-import com.example.data.network.ApiService
-import com.example.data.network.mapper.TrackMapper
+import com.example.data.network.mapper.RemoteTrackMapper
 import com.example.domain.Track
 import com.example.domain.repository.ChartRepository
 import kotlinx.coroutines.CoroutineScope
@@ -12,9 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ChartRepositoryImpl @Inject constructor(
+class RemoteChartRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val trackMapper: TrackMapper,
+    private val remoteTrackMapper: RemoteTrackMapper,
 ) : ChartRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -25,7 +24,7 @@ class ChartRepositoryImpl @Inject constructor(
         scope.launch {
             val initialTracks = apiService.getChart().trackList.tracks
                 .filter { it.type == TRACK_TYPE }
-                .map { trackMapper.mapTrackDtoToDomain(it) }
+                .map { remoteTrackMapper.mapTrackDtoToDomain(it) }
             _tracksFlow.emit(initialTracks)
         }
     }
@@ -39,13 +38,13 @@ class ChartRepositoryImpl @Inject constructor(
             0 -> {
                 apiService.getChart().trackList.tracks
                     .filter { it.type == TRACK_TYPE }
-                    .map { trackMapper.mapTrackDtoToDomain(it) }
+                    .map { remoteTrackMapper.mapTrackDtoToDomain(it) }
             }
 
             else -> {
                 apiService.searchTracks(query).dataList
                     .filter { it.type == TRACK_TYPE }
-                    .map { trackMapper.mapSearchItemTrackToDomain(it) }
+                    .map { remoteTrackMapper.mapSearchItemTrackToDomain(it) }
             }
         }
         _tracksFlow.emit(tracks)

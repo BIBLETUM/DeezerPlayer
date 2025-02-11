@@ -1,5 +1,6 @@
 package com.example.deezerplayer.di
 
+import android.content.ContentResolver
 import android.content.Context
 import com.example.deezerplayer.ViewModelFactory
 import dagger.BindsInstance
@@ -17,6 +18,7 @@ interface ApplicationComponent {
     interface Factory {
         fun create(
             @BindsInstance context: Context,
+            @BindsInstance contentResolver: ContentResolver,
         ): ApplicationComponent
     }
 

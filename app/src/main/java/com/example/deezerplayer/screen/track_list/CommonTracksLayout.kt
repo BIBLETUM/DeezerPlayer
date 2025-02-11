@@ -1,7 +1,7 @@
-package com.example.deezerplayer.screen.remote_tracks
+package com.example.deezerplayer.screen.track_list
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -9,63 +9,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.deezerplayer.component.LoaderScreen
 import com.example.deezerplayer.component.SearchBar
 import com.example.deezerplayer.component.TrackCard
-import com.example.deezerplayer.getApplicationComponent
 import com.example.deezerplayer.model.TrackUi
 
 @Composable
-fun RemoteTracksScreenRoot() {
-    val component = getApplicationComponent()
-    val viewModel: RemoteTracksViewModel = viewModel(factory = component.getViewModelFactory())
-    val state = viewModel.getScreenState().collectAsStateWithLifecycle()
-
-    RemoteTracksScreen(
-        state = state,
-        onQueryChange = viewModel::searchTracks,
-        onTrackClick = viewModel::selectTrack,
-    )
-}
-
-@Composable
-private fun RemoteTracksScreen(
-    state: State<RemoteTracksScreenState>,
-    onQueryChange: (String) -> Unit,
-    onTrackClick: (Long) -> Unit,
-) {
-
-    when (val currentState = state.value) {
-        is RemoteTracksScreenState.Content -> {
-            RemoteTrackScreenContent(
-                screenState = currentState,
-                onQueryChange = onQueryChange,
-                onTrackClick = onTrackClick,
-            )
-        }
-
-        RemoteTracksScreenState.Initial -> {
-            LoaderScreen()
-        }
-
-        is RemoteTracksScreenState.Error -> Log.d("RemoteTracksScreen", currentState.errorMessage)
-    }
-
-}
-
-@Composable
-private fun RemoteTrackScreenContent(
-    screenState: RemoteTracksScreenState.Content,
+fun TrackScreenContent(
+    paddingValues: PaddingValues,
+    screenState: TrackListContent,
     onQueryChange: (String) -> Unit,
     onTrackClick: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
+            .padding(paddingValues)
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
