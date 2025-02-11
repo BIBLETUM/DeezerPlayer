@@ -1,6 +1,5 @@
 package com.example.deezerplayer.screen.track_list.local_tracks
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.deezerplayer.mapper.TrackUiMapper
@@ -51,10 +50,6 @@ class LocalTracksViewModel @Inject constructor(
     }
 
     fun getScreenState(): StateFlow<LocalTracksScreenState> = screenState
-
-    fun selectTrack(trackId: Long) {
-        Log.d("RemoteTracksViewModel", "selectTrack: $trackId")
-    }
 
     fun forbidAudioPermission() {
         _screenState.update { LocalTracksScreenState.MissingPermission }

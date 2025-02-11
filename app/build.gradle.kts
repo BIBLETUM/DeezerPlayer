@@ -46,12 +46,18 @@ dependencies {
     implementation(project(":domain"))
 
 
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.session)
+
     implementation(libs.lottie)
 
     implementation(libs.dagger)
+    implementation(libs.androidx.lifecycle.service)
     kapt(libs.dagger.compiler)
 
     implementation(libs.coil.compose)
+
+    implementation(libs.gson)
 
     implementation(libs.androidx.lifecycle.runtime.compose.android)
 

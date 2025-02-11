@@ -1,5 +1,6 @@
 package com.example.data.network.mapper
 
+import android.net.Uri
 import com.example.data.network.model.SearchItemDto
 import com.example.data.network.model.TrackDto
 import com.example.domain.Track
@@ -15,6 +16,7 @@ class RemoteTrackMapper @Inject constructor() {
             artistName = dto.artist.name,
             coverUrl = dto.album.cover,
             length = dto.duration,
+            audioUrl = Uri.parse(dto.preview)
         )
     }
 
@@ -26,6 +28,7 @@ class RemoteTrackMapper @Inject constructor() {
             artistName = dto.artist.name,
             coverUrl = dto.album.cover,
             length = dto.duration,
+            audioUrl = Uri.parse(dto.preview)
         )
     }
 

@@ -11,6 +11,7 @@ import com.example.deezerplayer.component.BottomNavigationBarItem
 import com.example.deezerplayer.navigation.AppNavGraph
 import com.example.deezerplayer.navigation.NavigationItem
 import com.example.deezerplayer.navigation.Screen
+import com.example.deezerplayer.screen.player.PlayerScreenRoot
 import com.example.deezerplayer.screen.track_list.local_tracks.LocalTracksScreenRoot
 import com.example.deezerplayer.screen.track_list.remote_tracks.RemoteTracksScreenRoot
 import com.example.deezerplayer.theme.PlayerTheme
@@ -50,14 +51,31 @@ fun MainScreen() {
             navHostController = navHostController,
             remoteTracksScreen = {
                 RemoteTracksScreenRoot(
+                    navigateToPlayer = { trackId, sourceType ->
+                        navHostController.navigate(
+                            Screen.Player.getRouteWithArgs(trackId, sourceType)
+                        )
+                    },
                     paddingValues = paddingValues,
                 )
             },
             localTracksScreen = {
                 LocalTracksScreenRoot(
+                    navigateToPlayer = { trackId, sourceType ->
+                        navHostController.navigate(
+                            Screen.Player.getRouteWithArgs(trackId, sourceType)
+                        )
+                    },
                     paddingValues = paddingValues,
                 )
             },
+            playerScreen = { trackId, trackSourceType ->
+                PlayerScreenRoot(
+                    trackId = trackId,
+                    trackSourceType = trackSourceType,
+                    paddingValues = paddingValues,
+                )
+            }
         )
     }
 }

@@ -8,11 +8,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.deezerplayer.component.LoaderScreen
 import com.example.deezerplayer.getApplicationComponent
+import com.example.deezerplayer.model.TrackUi
 import com.example.deezerplayer.screen.track_list.TrackScreenContent
 
 @Composable
 fun RemoteTracksScreenRoot(
     paddingValues: PaddingValues,
+    navigateToPlayer: (Long, String) -> Unit,
 ) {
     val component = getApplicationComponent()
     val viewModel: RemoteTracksViewModel = viewModel(factory = component.getViewModelFactory())
@@ -22,7 +24,7 @@ fun RemoteTracksScreenRoot(
         paddingValues = paddingValues,
         state = state,
         onQueryChange = viewModel::searchTracks,
-        onTrackClick = viewModel::selectTrack,
+        onTrackClick = navigateToPlayer,
     )
 }
 
@@ -31,7 +33,7 @@ private fun RemoteTracksScreen(
     paddingValues: PaddingValues,
     state: State<RemoteTracksScreenState>,
     onQueryChange: (String) -> Unit,
-    onTrackClick: (Long) -> Unit,
+    onTrackClick: (Long, String) -> Unit,
 ) {
 
     when (val currentState = state.value) {
@@ -40,7 +42,9 @@ private fun RemoteTracksScreen(
                 paddingValues = paddingValues,
                 screenState = currentState,
                 onQueryChange = onQueryChange,
-                onTrackClick = onTrackClick,
+                onTrackClick = {
+                    onTrackClick(it, TrackUi.SOURCE_REMOTE)
+                },
             )
         }
 
