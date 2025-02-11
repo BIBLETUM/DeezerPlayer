@@ -1,6 +1,7 @@
 package com.example.deezerplayer.screen.track_list.remote_tracks
 
 import android.util.Log
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -8,15 +9,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.deezerplayer.component.LoaderScreen
 import com.example.deezerplayer.getApplicationComponent
 import com.example.deezerplayer.screen.track_list.TrackScreenContent
-import com.example.deezerplayer.screen.track_list.TracksScreenState
 
 @Composable
-fun RemoteTracksScreenRoot() {
+fun RemoteTracksScreenRoot(
+    paddingValues: PaddingValues,
+) {
     val component = getApplicationComponent()
     val viewModel: RemoteTracksViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.getScreenState().collectAsStateWithLifecycle()
 
     RemoteTracksScreen(
+        paddingValues = paddingValues,
         state = state,
         onQueryChange = viewModel::searchTracks,
         onTrackClick = viewModel::selectTrack,
@@ -25,25 +28,27 @@ fun RemoteTracksScreenRoot() {
 
 @Composable
 private fun RemoteTracksScreen(
-    state: State<TracksScreenState>,
+    paddingValues: PaddingValues,
+    state: State<RemoteTracksScreenState>,
     onQueryChange: (String) -> Unit,
     onTrackClick: (Long) -> Unit,
 ) {
 
     when (val currentState = state.value) {
-        is TracksScreenState.Content -> {
+        is RemoteTracksScreenState.Content -> {
             TrackScreenContent(
+                paddingValues = paddingValues,
                 screenState = currentState,
                 onQueryChange = onQueryChange,
                 onTrackClick = onTrackClick,
             )
         }
 
-        TracksScreenState.Initial -> {
+        RemoteTracksScreenState.Initial -> {
             LoaderScreen()
         }
 
-        is TracksScreenState.Error -> Log.d("RemoteTracksScreen", currentState.errorMessage)
+        is RemoteTracksScreenState.Error -> Log.d("RemoteTracksScreen", currentState.errorMessage)
     }
 
 }

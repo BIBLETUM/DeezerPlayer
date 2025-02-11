@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.deezerplayer.mapper.TrackUiMapper
-import com.example.deezerplayer.screen.track_list.TracksScreenState
-import com.example.domain.IGetRemoteTracksFlowUseCase
-import com.example.domain.ISearchRemoteTracksUseCase
+import com.example.domain.use_case.IGetRemoteTracksFlowUseCase
+import com.example.domain.use_case.ISearchRemoteTracksUseCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,11 +22,11 @@ class RemoteTracksViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        _screenState.update { TracksScreenState.Error(throwable.toString()) }
+        _screenState.update { RemoteTracksScreenState.Error(throwable.toString()) }
     }
 
     private val _screenState =
-        MutableStateFlow<TracksScreenState>(TracksScreenState.Initial)
+        MutableStateFlow<RemoteTracksScreenState>(RemoteTracksScreenState.Initial)
     private val screenState = _screenState.asStateFlow()
 
     init {
@@ -39,11 +38,10 @@ class RemoteTracksViewModel @Inject constructor(
                     }
                 }
                 .collect { tracks ->
-                    Log.d("Abaoba", tracks.toString())
                     _screenState.update {
-                        TracksScreenState.Content(
+                        RemoteTracksScreenState.Content(
                             tracks = tracks,
-                            searchQuery = (it as? TracksScreenState.Content)?.searchQuery
+                            searchQuery = (it as? RemoteTracksScreenState.Content)?.searchQuery
                                 ?: "",
                             isLoading = false,
                         )
@@ -52,7 +50,7 @@ class RemoteTracksViewModel @Inject constructor(
         }
     }
 
-    fun getScreenState(): StateFlow<TracksScreenState> = screenState
+    fun getScreenState(): StateFlow<RemoteTracksScreenState> = screenState
 
     fun selectTrack(trackId: Long) {
         Log.d("RemoteTracksViewModel", "selectTrack: $trackId")
@@ -60,7 +58,7 @@ class RemoteTracksViewModel @Inject constructor(
 
     fun searchTracks(query: String) {
         _screenState.update {
-            (it as? TracksScreenState.Content)
+            (it as? RemoteTracksScreenState.Content)
                 ?.copy(searchQuery = query, isLoading = true) ?: it
         }
         viewModelScope.launch {

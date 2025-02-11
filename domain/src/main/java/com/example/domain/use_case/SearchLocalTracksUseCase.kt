@@ -1,12 +1,12 @@
-package com.example.domain
+package com.example.domain.use_case
 
 import com.example.domain.repository.ChartRepository
 import javax.inject.Inject
 import javax.inject.Named
 
-class SearchRemoteTracksUseCase @Inject constructor(
-    @Named("RemoteRepository") private val repository: ChartRepository
-) : ISearchRemoteTracksUseCase {
+class SearchLocalTracksUseCase @Inject constructor(
+    @Named("LocalRepository") private val repository: ChartRepository
+) : ISearchLocalTracksUseCase {
 
     override suspend operator fun invoke(query: String) {
         repository.searchTracks(query)
@@ -14,6 +14,6 @@ class SearchRemoteTracksUseCase @Inject constructor(
 
 }
 
-interface ISearchRemoteTracksUseCase {
+interface ISearchLocalTracksUseCase {
     suspend operator fun invoke(query: String)
 }

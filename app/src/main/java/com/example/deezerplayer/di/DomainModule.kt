@@ -1,9 +1,13 @@
 package com.example.deezerplayer.di
 
-import com.example.domain.GetRemoteTracksFlowUseCase
-import com.example.domain.IGetRemoteTracksFlowUseCase
-import com.example.domain.ISearchRemoteTracksUseCase
-import com.example.domain.SearchRemoteTracksUseCase
+import com.example.domain.use_case.GetLocalTracksFlowUseCase
+import com.example.domain.use_case.GetRemoteTracksFlowUseCase
+import com.example.domain.use_case.IGetLocalTracksFlowUseCase
+import com.example.domain.use_case.IGetRemoteTracksFlowUseCase
+import com.example.domain.use_case.ISearchLocalTracksUseCase
+import com.example.domain.use_case.ISearchRemoteTracksUseCase
+import com.example.domain.use_case.SearchLocalTracksUseCase
+import com.example.domain.use_case.SearchRemoteTracksUseCase
 import dagger.Binds
 import dagger.Module
 
@@ -17,5 +21,13 @@ interface DomainModule {
     @ApplicationScope
     @Binds
     fun bindSearchRemoteTracksUseCase(impl: SearchRemoteTracksUseCase): ISearchRemoteTracksUseCase
+
+    @ApplicationScope
+    @Binds
+    fun bindGetLocalTracksFlowUseCase(impl: GetLocalTracksFlowUseCase): IGetLocalTracksFlowUseCase
+
+    @ApplicationScope
+    @Binds
+    fun bindSearchLocalTracksUseCase(impl: SearchLocalTracksUseCase): ISearchLocalTracksUseCase
 
 }

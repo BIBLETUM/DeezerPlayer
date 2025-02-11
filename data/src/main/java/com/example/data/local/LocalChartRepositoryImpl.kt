@@ -10,8 +10,8 @@ import com.example.data.local.model.MusicFile
 import com.example.domain.Track
 import com.example.domain.repository.ChartRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 class LocalChartRepositoryImpl @Inject constructor(
@@ -19,12 +19,11 @@ class LocalChartRepositoryImpl @Inject constructor(
     private val localTrackMapper: LocalTrackMapper,
 ) : ChartRepository {
 
-    private val _tracksFlow = MutableStateFlow(
-        getMusicFiles().map { localTrackMapper.mapMusicFileToDomain(it) }
-    )
+    private val _tracksFlow = MutableSharedFlow<List<Track>>(replay = 1)
 
     override fun getTracksFlow(): Flow<List<Track>> {
-        return _tracksFlow.asStateFlow()
+        _tracksFlow.tryEmit(getMusicFiles().map { localTrackMapper.mapMusicFileToDomain(it) })
+        return _tracksFlow.asSharedFlow()
     }
 
     override suspend fun searchTracks(query: String) {
@@ -38,7 +37,7 @@ class LocalChartRepositoryImpl @Inject constructor(
             }
         }
 
-        _tracksFlow.value = filteredTracks
+        _tracksFlow.emit(filteredTracks)
     }
 
     private fun getMusicFiles(): List<MusicFile> {

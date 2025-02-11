@@ -1,5 +1,6 @@
-package com.example.domain
+package com.example.domain.use_case
 
+import com.example.domain.Track
 import com.example.domain.repository.ChartRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -1,6 +1,7 @@
 package com.example.deezerplayer.screen.track_list
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -17,12 +18,14 @@ import com.example.deezerplayer.model.TrackUi
 
 @Composable
 fun TrackScreenContent(
-    screenState: TracksScreenState.Content,
+    paddingValues: PaddingValues,
+    screenState: TrackListContent,
     onQueryChange: (String) -> Unit,
     onTrackClick: (Long) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
+            .padding(paddingValues)
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
