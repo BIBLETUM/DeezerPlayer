@@ -3,10 +3,11 @@ package com.example.domain
 import com.example.domain.repository.ChartRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Named
 
-class GetRemoteTracksUseCase @Inject constructor(
-    private val repository: ChartRepository
-) : IGetRemoteTracksUseCase {
+class GetRemoteTracksFlowUseCase @Inject constructor(
+    @Named("RemoteRepository") private val repository: ChartRepository
+) : IGetRemoteTracksFlowUseCase {
 
     override operator fun invoke(): Flow<List<Track>> {
         return repository.getTracksFlow()
@@ -14,6 +15,6 @@ class GetRemoteTracksUseCase @Inject constructor(
 
 }
 
-interface IGetRemoteTracksUseCase {
+interface IGetRemoteTracksFlowUseCase {
     operator fun invoke(): Flow<List<Track>>
 }

@@ -13,6 +13,7 @@ class TrackUiMapper @Inject constructor() {
             albumName = domain.albumName,
             artistName = domain.artistName,
             coverUrl = domain.coverUrl,
+            length = domain.length,
         )
     }
 

@@ -36,6 +36,8 @@ internal fun TextInputField(
     text: String,
     style: TextStyle,
     isError: Boolean = false,
+    leadingIcon: @Composable() (RowScope.(String) -> Unit)? = null,
+    trailingIcon: @Composable() (RowScope.(String) -> Unit)? = null,
     @StringRes placeholderTextResId: Int,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onTextChanged: (String) -> Unit,
@@ -67,7 +69,9 @@ internal fun TextInputField(
             DecorationTextRow(
                 text = text,
                 style = style,
+                leadingIcon = leadingIcon,
                 placeholderTextResId = placeholderTextResId,
+                trailingIcon = trailingIcon,
                 innerTextField = innerTextField
             )
         },
@@ -104,7 +108,6 @@ private fun DecorationTextRow(
             }
             innerTextField()
         }
-
 
         trailingIcon?.invoke(this, text)
     }

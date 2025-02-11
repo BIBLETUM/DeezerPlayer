@@ -10,7 +10,8 @@ class DeezerApplication : Application() {
 
     val component: ApplicationComponent by lazy {
         DaggerApplicationComponent.factory().create(
-            this
+            this,
+            contentResolver
         )
     }
 }

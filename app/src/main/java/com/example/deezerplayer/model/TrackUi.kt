@@ -6,4 +6,5 @@ data class TrackUi(
     val albumName: String,
     val artistName: String,
     val coverUrl: String,
+    val length: Int,
 )
