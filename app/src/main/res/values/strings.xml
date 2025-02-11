@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DeezerPlayer</string>
+    <string name="search_tracks">Поиск треков</string>
+    <string name="cancel">Отмена</string>
 </resources>

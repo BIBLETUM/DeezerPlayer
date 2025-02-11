@@ -1,10 +1,16 @@
-package com.example.deezerplayer.ui.theme
+package com.example.deezerplayer.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.deezerplayer.R
+
+val nunitoFontFamily = FontFamily(
+    Font(R.font.nunito_regular, FontWeight.Normal),
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
