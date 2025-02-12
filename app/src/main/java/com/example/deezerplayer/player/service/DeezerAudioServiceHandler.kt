@@ -20,6 +20,7 @@ import javax.inject.Inject
 class DeezerAudioServiceHandler @Inject constructor(
     private val exoPlayer: ExoPlayer,
 ) : Player.Listener {
+
     private val _audioState: MutableStateFlow<DeezerPlayerState> =
         MutableStateFlow(DeezerPlayerState.Initial)
     private val audioState: StateFlow<DeezerPlayerState> = _audioState.asStateFlow()
