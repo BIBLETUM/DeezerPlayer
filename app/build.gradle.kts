@@ -45,16 +45,21 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.media3.datasource.okhttp)
+    implementation(libs.androidx.media3.ui.v110)
+    implementation(libs.androidx.legacy.support.v4)
 
     implementation(libs.lottie)
 
     implementation(libs.dagger)
     implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media)
     kapt(libs.dagger.compiler)
 
+    implementation(libs.glide)
     implementation(libs.coil.compose)
 
     implementation(libs.gson)
