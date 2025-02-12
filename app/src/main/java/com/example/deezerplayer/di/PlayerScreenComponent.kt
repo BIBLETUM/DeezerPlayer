@@ -2,6 +2,7 @@ package com.example.deezerplayer.di
 
 import com.example.deezerplayer.ViewModelFactory
 import com.example.deezerplayer.component.PlayerViewModelModule
+import com.example.deezerplayer.model.TrackSourceType
 import dagger.BindsInstance
 import dagger.Subcomponent
 
@@ -15,7 +16,7 @@ interface PlayerScreenComponent {
 
         fun create(
             @BindsInstance trackId: Long,
-            @BindsInstance trackSourceType: String,
+            @BindsInstance trackSourceType: TrackSourceType,
         ): PlayerScreenComponent
     }
 }

@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.deezerplayer.getApplicationComponent
+import com.example.deezerplayer.model.TrackSourceType
 
 @Composable
 fun PlayerScreenRoot(
     trackId: Long,
-    trackSourceType: String,
+    trackSourceType: TrackSourceType,
     paddingValues: PaddingValues,
 ) {
     val component = getApplicationComponent()

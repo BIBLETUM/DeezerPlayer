@@ -22,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.deezerplayer.R
 import com.example.deezerplayer.component.LoaderScreen
 import com.example.deezerplayer.getApplicationComponent
-import com.example.deezerplayer.model.TrackUi
+import com.example.deezerplayer.model.TrackSourceType
 import com.example.deezerplayer.permission.RequestMediaAudioPermission
 import com.example.deezerplayer.permission.openAppSettings
 import com.example.deezerplayer.screen.track_list.TrackScreenContent
@@ -31,7 +31,7 @@ import com.example.deezerplayer.theme.nunitoFontFamily
 @Composable
 fun LocalTracksScreenRoot(
     paddingValues: PaddingValues,
-    navigateToPlayer: (Long, String) -> Unit,
+    navigateToPlayer: (Long, TrackSourceType) -> Unit,
 ) {
     val component = getApplicationComponent()
     val viewModel: LocalTracksViewModel = viewModel(factory = component.getViewModelFactory())
@@ -49,7 +49,9 @@ fun LocalTracksScreenRoot(
         paddingValues = paddingValues,
         state = state,
         onQueryChange = viewModel::searchTracks,
-        onTrackClick = navigateToPlayer,
+        onTrackClick = { trackId ->
+            navigateToPlayer(trackId, TrackSourceType.LOCAL)
+        },
     )
 }
 
@@ -58,7 +60,7 @@ private fun LocalTracksScreen(
     paddingValues: PaddingValues,
     state: State<LocalTracksScreenState>,
     onQueryChange: (String) -> Unit,
-    onTrackClick: (Long, String) -> Unit,
+    onTrackClick: (Long) -> Unit,
 ) {
 
     when (val currentState = state.value) {
@@ -67,9 +69,7 @@ private fun LocalTracksScreen(
                 paddingValues = paddingValues,
                 screenState = currentState,
                 onQueryChange = onQueryChange,
-                onTrackClick = {
-                    onTrackClick(it, TrackUi.SOURCE_LOCAL)
-                },
+                onTrackClick = onTrackClick,
             )
         }
 
