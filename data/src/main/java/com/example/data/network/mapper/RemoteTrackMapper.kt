@@ -14,7 +14,7 @@ class RemoteTrackMapper @Inject constructor() {
             title = dto.title,
             albumName = dto.album.title,
             artistName = dto.artist.name,
-            coverUrl = dto.album.cover,
+            coverUrl = dto.album.coverUrl,
             length = dto.duration,
             audioUrl = Uri.parse(dto.preview)
         )
@@ -26,7 +26,7 @@ class RemoteTrackMapper @Inject constructor() {
             title = dto.title,
             albumName = dto.album.title,
             artistName = dto.artist.name,
-            coverUrl = dto.album.cover,
+            coverUrl = dto.album.coverUrl,
             length = dto.duration,
             audioUrl = Uri.parse(dto.preview)
         )

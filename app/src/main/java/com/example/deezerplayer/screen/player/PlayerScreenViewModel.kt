@@ -1,5 +1,6 @@
 package com.example.deezerplayer.screen.player
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -72,6 +73,7 @@ class PlayerScreenViewModel @Inject constructor(
                 .setMediaMetadata(
                     MediaMetadata.Builder()
                         .setAlbumArtist(track.artistName)
+                        .setArtworkUri(Uri.parse(track.coverUrl))
                         .setDisplayTitle(track.title)
                         .setSubtitle(track.albumName)
                         .build()
