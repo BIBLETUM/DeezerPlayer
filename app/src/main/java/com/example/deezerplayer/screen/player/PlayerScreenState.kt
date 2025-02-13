@@ -7,6 +7,10 @@ sealed class PlayerScreenState {
     data class Content(
         val track: TrackUi,
         val progress: Float,
+        val durationCurrent: String,
         val isAudioPlaying: Boolean,
+        val hasNextTrack: Boolean,
     ) : PlayerScreenState()
+
+    data class Error(val errorMessage: String) : PlayerScreenState()
 }

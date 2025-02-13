@@ -1,5 +1,6 @@
 package com.example.deezerplayer.model
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
 
 @Immutable
@@ -9,5 +10,7 @@ data class TrackUi(
     val albumName: String,
     val artistName: String,
     val coverUrl: String,
-    val duration: String,
+    val durationString: String,
+    val duration: Int,
+    val audioUri: Uri,
 )

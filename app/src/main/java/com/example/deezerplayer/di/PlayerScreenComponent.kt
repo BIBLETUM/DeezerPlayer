@@ -15,7 +15,6 @@ interface PlayerScreenComponent {
     interface Factory {
 
         fun create(
-            @BindsInstance trackId: Long,
             @BindsInstance trackSourceType: TrackSourceType,
         ): PlayerScreenComponent
     }

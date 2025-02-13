@@ -1,5 +1,6 @@
 package com.example.deezerplayer.player.service
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.media3.common.Player
@@ -48,4 +49,16 @@ class DeezerAudioService : MediaSessionService() {
             }
         }
     }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, DeezerAudioService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+        }
+    }
+
 }

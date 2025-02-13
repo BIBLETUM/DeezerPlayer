@@ -16,7 +16,9 @@ class TrackUiMapper @Inject constructor() {
             albumName = domain.albumName,
             artistName = domain.artistName,
             coverUrl = domain.coverUrl,
-            duration = formatDuration(domain.length),
+            durationString = formatDuration(domain.length),
+            duration = domain.length,
+            audioUri = domain.audioUrl
         )
     }
 

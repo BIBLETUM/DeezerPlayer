@@ -34,42 +34,31 @@ class DeezerAudioServiceHandler @Inject constructor(
 
     fun getAudioState(): StateFlow<DeezerPlayerState> = audioState
 
-    fun addMediaItem(mediaItem: MediaItem) {
-        exoPlayer.setMediaItem(mediaItem)
-        exoPlayer.prepare()
-    }
-
     fun setMediaItemList(mediaItems: List<MediaItem>) {
         exoPlayer.setMediaItems(mediaItems)
         exoPlayer.prepare()
     }
 
-    suspend fun onPlayerEvents(
+    fun onPlayerEvents(
         playerEvent: PlayerEvent,
         selectedAudioIndex: Int = -1,
         seekPosition: Long = 0,
     ) {
         when (playerEvent) {
-            PlayerEvent.Backward -> exoPlayer.seekBack()
-            PlayerEvent.Forward -> exoPlayer.seekForward()
-            PlayerEvent.SeekToNext -> exoPlayer.seekToNext()
+            PlayerEvent.PreviousTrack -> exoPlayer.seekToPreviousMediaItem()
+            PlayerEvent.NextTrack -> {
+                exoPlayer.seekToNextMediaItem()
+            }
+
             PlayerEvent.PlayPause -> playOrPause()
             PlayerEvent.SeekTo -> exoPlayer.seekTo(seekPosition)
             PlayerEvent.SelectedAudioChange -> {
-                when (selectedAudioIndex) {
-                    exoPlayer.currentMediaItemIndex -> {
-                        playOrPause()
-                    }
-
-                    else -> {
-                        exoPlayer.seekToDefaultPosition(selectedAudioIndex)
-                        _audioState.value = DeezerPlayerState.Playing(
-                            isPlaying = true
-                        )
-                        exoPlayer.playWhenReady = true
-                        startProgressUpdate()
-                    }
-                }
+                exoPlayer.seekToDefaultPosition(selectedAudioIndex)
+                _audioState.value = DeezerPlayerState.Playing(
+                    isPlaying = true
+                )
+                exoPlayer.playWhenReady = true
+                startProgressUpdate()
             }
 
             PlayerEvent.Stop -> stopProgressUpdate()
@@ -86,14 +75,21 @@ class DeezerAudioServiceHandler @Inject constructor(
             ExoPlayer.STATE_BUFFERING -> _audioState.value =
                 DeezerPlayerState.Buffering(exoPlayer.currentPosition)
 
-            ExoPlayer.STATE_READY -> _audioState.value =
-                DeezerPlayerState.Ready(exoPlayer.duration)
+            ExoPlayer.STATE_READY -> {
+                _audioState.value = DeezerPlayerState.CurrentPlaying(
+                    mediaItemIndex = exoPlayer.currentMediaItemIndex,
+                    duration = exoPlayer.duration,
+                    hasNextTrack = exoPlayer.hasNextMediaItem()
+                )
+                _audioState.value = DeezerPlayerState.Playing(false)
+            }
+
         }
+        exoPlayer.currentPosition
     }
 
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         _audioState.value = DeezerPlayerState.Playing(isPlaying = isPlaying)
-        _audioState.value = DeezerPlayerState.CurrentPlaying(exoPlayer.currentMediaItemIndex)
         if (isPlaying) {
             startProgressUpdate()
         } else {

@@ -104,6 +104,9 @@ fun MainScreen() {
                     onComposing = {
                         isBottomNavigationEnabled = false
                     },
+                    navigateBack = {
+                        navHostController.popBackStack()
+                    },
                     paddingValues = paddingValues,
                 )
             }
