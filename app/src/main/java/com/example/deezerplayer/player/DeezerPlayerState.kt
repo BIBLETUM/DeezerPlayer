@@ -7,7 +7,8 @@ sealed class DeezerPlayerState {
     data class Playing(val isPlaying: Boolean) : DeezerPlayerState()
     data class CurrentPlaying(
         val mediaItemIndex: Int,
-        val duration: Long,
-        val hasNextTrack: Boolean
+        val hasNextTrack: Boolean,
+        val totalDurationMillis: Long,
+        val currentDurationMillis: Long,
     ) : DeezerPlayerState()
 }

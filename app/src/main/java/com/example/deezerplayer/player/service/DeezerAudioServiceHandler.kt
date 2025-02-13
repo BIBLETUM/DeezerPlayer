@@ -41,7 +41,7 @@ class DeezerAudioServiceHandler @Inject constructor(
 
     fun onPlayerEvents(
         playerEvent: PlayerEvent,
-        selectedAudioIndex: Int = -1,
+        selectedAudioIndex: Int = UNSPECIFIED_INDEX,
         seekPosition: Long = 0,
     ) {
         when (playerEvent) {
@@ -78,8 +78,9 @@ class DeezerAudioServiceHandler @Inject constructor(
             ExoPlayer.STATE_READY -> {
                 _audioState.value = DeezerPlayerState.CurrentPlaying(
                     mediaItemIndex = exoPlayer.currentMediaItemIndex,
-                    duration = exoPlayer.duration,
-                    hasNextTrack = exoPlayer.hasNextMediaItem()
+                    totalDurationMillis = exoPlayer.duration,
+                    hasNextTrack = exoPlayer.hasNextMediaItem(),
+                    currentDurationMillis = exoPlayer.currentPosition
                 )
                 _audioState.value = DeezerPlayerState.Playing(false)
             }
@@ -112,7 +113,7 @@ class DeezerAudioServiceHandler @Inject constructor(
         job?.cancel()
         job = coroutineScope.launch {
             while (isActive) {
-                delay(500)
+                delay(100)
                 _audioState.value = DeezerPlayerState.Progress(exoPlayer.currentPosition)
             }
         }
@@ -122,4 +123,9 @@ class DeezerAudioServiceHandler @Inject constructor(
         job?.cancel()
         _audioState.value = DeezerPlayerState.Playing(isPlaying = false)
     }
+
+    companion object {
+        private const val UNSPECIFIED_INDEX = -1
+    }
+
 }

@@ -140,7 +140,7 @@ private fun PlayerScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
         Slider(
             modifier = Modifier.fillMaxWidth(),
-            value = screenState.progress,
+            value = screenState.currentProgress,
             colors = SliderDefaults.colors(
                 thumbColor = PlayerTheme.colors.primary,
                 activeTrackColor = PlayerTheme.colors.primary,
@@ -150,7 +150,7 @@ private fun PlayerScreenContent(
         )
         DurationInfo(
             modifier = Modifier.fillMaxWidth(),
-            durationCurrent = screenState.durationCurrent,
+            durationCurrent = screenState.currentDurationString,
             durationTotal = screenState.track.durationString
         )
         Spacer(Modifier.height(68.dp))

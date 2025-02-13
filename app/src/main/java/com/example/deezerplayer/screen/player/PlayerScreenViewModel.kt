@@ -1,7 +1,6 @@
 package com.example.deezerplayer.screen.player
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -70,8 +69,11 @@ class PlayerScreenViewModel @Inject constructor(
 
                 is PlayerUIEvents.SeekTo -> {
                     getCurrentContent()?.let { currentContent ->
-                        val durationMs = currentContent.track.duration * 1000L
-                        val seekPosition = ((durationMs * uiEvents.position) / 100f).toLong()
+                        val durationMs = currentContent.track.durationSeconds
+                            .toDuration(DurationUnit.SECONDS)
+                            .inWholeMilliseconds
+                            .toFloat()
+                        val seekPosition = ((durationMs * uiEvents.position) / PERCANTAGE).toLong()
                         audioServiceHandler.onPlayerEvents(
                             PlayerEvent.SeekTo,
                             seekPosition = seekPosition
@@ -105,7 +107,6 @@ class PlayerScreenViewModel @Inject constructor(
                     DeezerPlayerState.Initial -> _screenState.update { PlayerScreenState.Initial }
                     is DeezerPlayerState.Buffering -> calculateProgressValue(mediaState.progress)
                     is DeezerPlayerState.Playing -> {
-                        Log.d("Playing", "ABBA")
                         getCurrentContent()?.let { currentState ->
                             _screenState.update {
                                 currentState.copy(isAudioPlaying = mediaState.isPlaying)
@@ -115,12 +116,12 @@ class PlayerScreenViewModel @Inject constructor(
 
                     is DeezerPlayerState.Progress -> calculateProgressValue(mediaState.progress)
                     is DeezerPlayerState.CurrentPlaying -> {
-                        Log.d("CurrentPlaying", "ABBA")
                         val track = tracksList[mediaState.mediaItemIndex]
                         updatePlayingSong(
-                            actualDuration = mediaState.duration,
+                            totalDurationMillis = mediaState.totalDurationMillis,
                             track = track,
-                            hasNextTrack = mediaState.hasNextTrack
+                            hasNextTrack = mediaState.hasNextTrack,
+                            currentDurationMillis = mediaState.currentDurationMillis
                         )
                     }
                 }
@@ -128,45 +129,58 @@ class PlayerScreenViewModel @Inject constructor(
         }
     }
 
-    private fun updatePlayingSong(track: TrackUi, actualDuration: Long, hasNextTrack: Boolean) {
+    private fun updatePlayingSong(
+        track: TrackUi,
+        totalDurationMillis: Long,
+        currentDurationMillis: Long,
+        hasNextTrack: Boolean
+    ) {
         _screenState.update {
             PlayerScreenState.Content(
                 track = track.copy(
-                    duration = actualDuration.toDuration(DurationUnit.MILLISECONDS).inWholeSeconds.toInt(),
-                    durationString = formatDuration(actualDuration)
+                    durationSeconds = totalDurationMillis.toDuration(DurationUnit.MILLISECONDS).inWholeSeconds.toInt(),
+                    durationString = formatDuration(totalDurationMillis)
                 ),
-                progress = INITIAL_PROGRESS,
-                durationCurrent = INITIAL_PROGRESS_STRING,
+                currentProgress = getCurrentProgress(currentDurationMillis, totalDurationMillis),
+                currentDurationString = formatDuration(currentDurationMillis),
                 isAudioPlaying = true,
                 hasNextTrack = hasNextTrack,
             )
         }
     }
 
-    private fun calculateProgressValue(currentProgress: Long) {
+    private fun calculateProgressValue(currentProgressMillis: Long) {
         val currentState = getCurrentContent() ?: return
         _screenState.update {
             currentState.copy(
-                durationCurrent = formatDuration(currentProgress),
-                progress = if (currentProgress > 0) {
-                    ((currentProgress.toFloat() / (currentState.track.duration.toFloat() * 1000f)) * 100f)
-                } else {
-                    0f
-                }
+                currentDurationString = formatDuration(currentProgressMillis),
+                currentProgress = getCurrentProgress(
+                    currentDurationMillis = currentProgressMillis,
+                    totalDurationMillis = (currentState.track.durationSeconds * 1000f).toLong()
+                )
             )
+        }
+    }
+
+    private fun getCurrentProgress(currentDurationMillis: Long, totalDurationMillis: Long): Float {
+        return if (currentDurationMillis > 0) {
+            ((currentDurationMillis.toFloat() / (totalDurationMillis.toFloat())) * PERCANTAGE)
+        } else {
+            INITIAL_PROGRESS
         }
     }
 
     private fun updateScreenStateProgress(newProgress: Float) {
         val currentContent = getCurrentContent() ?: return
         _screenState.update {
-            currentContent.copy(progress = newProgress)
+            currentContent.copy(currentProgress = newProgress)
         }
     }
 
-    private fun formatDuration(duration: Long): String {
-        val minute = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
-        val seconds = TimeUnit.SECONDS.convert(duration, TimeUnit.MILLISECONDS) % 60
+    private fun formatDuration(durationMillis: Long): String {
+        val minute = TimeUnit.MINUTES.convert(durationMillis, TimeUnit.MILLISECONDS)
+        val seconds =
+            TimeUnit.SECONDS.convert(durationMillis, TimeUnit.MILLISECONDS) % SECONDS_IN_MINUTE
         return String.format(Locale.getDefault(), "%02d:%02d", minute, seconds)
     }
 
@@ -193,9 +207,9 @@ class PlayerScreenViewModel @Inject constructor(
     }
 
     private companion object {
-        const val INITIAL_PROGRESS_STRING = "00:00"
-
+        const val PERCANTAGE = 100f
         const val INITIAL_PROGRESS = 0f
+        const val SECONDS_IN_MINUTE = 60
     }
 
 }

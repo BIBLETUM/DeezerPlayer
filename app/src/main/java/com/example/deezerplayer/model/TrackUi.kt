@@ -11,6 +11,6 @@ data class TrackUi(
     val artistName: String,
     val coverUrl: String,
     val durationString: String,
-    val duration: Int,
+    val durationSeconds: Int,
     val audioUri: Uri,
 )
