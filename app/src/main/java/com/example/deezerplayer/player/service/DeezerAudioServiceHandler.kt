@@ -1,20 +1,14 @@
 package com.example.deezerplayer.player.service
 
+import android.view.Choreographer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.deezerplayer.player.DeezerPlayerState
 import com.example.deezerplayer.player.PlayerEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DeezerAudioServiceHandler @Inject constructor(
@@ -25,8 +19,14 @@ class DeezerAudioServiceHandler @Inject constructor(
         MutableStateFlow(DeezerPlayerState.Initial)
     private val audioState: StateFlow<DeezerPlayerState> = _audioState.asStateFlow()
 
-    private var job: Job? = null
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val frameCallback: Choreographer.FrameCallback = object : Choreographer.FrameCallback {
+        override fun doFrame(frameTimeNanos: Long) {
+            if (exoPlayer.isPlaying) {
+                _audioState.value = DeezerPlayerState.Progress(exoPlayer.currentPosition)
+                Choreographer.getInstance().postFrameCallback(this)
+            }
+        }
+    }
 
     init {
         exoPlayer.addListener(this)
@@ -45,7 +45,14 @@ class DeezerAudioServiceHandler @Inject constructor(
         seekPosition: Long = 0,
     ) {
         when (playerEvent) {
-            PlayerEvent.PreviousTrack -> exoPlayer.seekToPreviousMediaItem()
+            PlayerEvent.PreviousTrack -> {
+                if (exoPlayer.hasPreviousMediaItem()) {
+                    exoPlayer.seekToPreviousMediaItem()
+                } else {
+                    exoPlayer.seekToDefaultPosition()
+                }
+            }
+
             PlayerEvent.NextTrack -> {
                 exoPlayer.seekToNextMediaItem()
             }
@@ -89,6 +96,15 @@ class DeezerAudioServiceHandler @Inject constructor(
         exoPlayer.currentPosition
     }
 
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        _audioState.value = DeezerPlayerState.CurrentPlaying(
+            mediaItemIndex = exoPlayer.currentMediaItemIndex,
+            totalDurationMillis = exoPlayer.duration,
+            hasNextTrack = exoPlayer.hasNextMediaItem(),
+            currentDurationMillis = exoPlayer.currentPosition
+        )
+    }
+
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         _audioState.value = DeezerPlayerState.Playing(isPlaying = isPlaying)
         if (isPlaying) {
@@ -110,18 +126,11 @@ class DeezerAudioServiceHandler @Inject constructor(
     }
 
     private fun startProgressUpdate() {
-        job?.cancel()
-        job = coroutineScope.launch {
-            while (isActive) {
-                delay(100)
-                _audioState.value = DeezerPlayerState.Progress(exoPlayer.currentPosition)
-            }
-        }
+        Choreographer.getInstance().postFrameCallback(frameCallback)
     }
 
     private fun stopProgressUpdate() {
-        job?.cancel()
-        _audioState.value = DeezerPlayerState.Playing(isPlaying = false)
+        Choreographer.getInstance().removeFrameCallback(frameCallback)
     }
 
     companion object {
