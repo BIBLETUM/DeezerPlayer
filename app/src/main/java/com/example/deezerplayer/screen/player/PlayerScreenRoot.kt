@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,8 +18,12 @@ import com.example.deezerplayer.player.service.DeezerAudioService
 fun PlayerScreenRoot(
     trackId: Long,
     trackSourceType: TrackSourceType,
+    onComposing: () -> Unit,
     paddingValues: PaddingValues,
 ) {
+    LaunchedEffect(Unit) {
+        onComposing()
+    }
     val component = getApplicationComponent()
         .getPlayerScreenComponentFactory()
         .create(trackId, trackSourceType)

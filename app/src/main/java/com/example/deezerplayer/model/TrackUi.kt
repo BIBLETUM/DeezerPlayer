@@ -9,10 +9,5 @@ data class TrackUi(
     val albumName: String,
     val artistName: String,
     val coverUrl: String,
-    val length: Int,
-) {
-    companion object {
-        const val SOURCE_REMOTE = "remote"
-        const val SOURCE_LOCAL = "local"
-    }
-}
+    val duration: String,
+)

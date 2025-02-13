@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,8 +32,12 @@ import com.example.deezerplayer.theme.nunitoFontFamily
 @Composable
 fun LocalTracksScreenRoot(
     paddingValues: PaddingValues,
+    onComposing: () -> Unit,
     navigateToPlayer: (Long, TrackSourceType) -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        onComposing()
+    }
     val component = getApplicationComponent()
     val viewModel: LocalTracksViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.getScreenState().collectAsStateWithLifecycle()

@@ -3,6 +3,9 @@ package com.example.deezerplayer
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -19,28 +22,31 @@ import com.example.deezerplayer.theme.PlayerTheme
 @Composable
 fun MainScreen() {
     val navHostController = rememberNavController()
+    var isBottomNavigationEnabled by rememberSaveable { mutableStateOf(true) }
     val navigationItems = listOf(
         NavigationItem.RemoteMusic, NavigationItem.LocalMusic
     )
     Scaffold(containerColor = PlayerTheme.colors.neutralWhite,
         bottomBar = {
-            val backStackEntry by navHostController.currentBackStackEntryAsState()
-            BottomNavigationBar {
-                navigationItems.forEach { navigationItem ->
-                    val selected = backStackEntry?.destination?.hierarchy?.any {
-                        it.route == navigationItem.screen.route
-                    } ?: false
+            if (isBottomNavigationEnabled) {
+                val backStackEntry by navHostController.currentBackStackEntryAsState()
+                BottomNavigationBar {
+                    navigationItems.forEach { navigationItem ->
+                        val selected = backStackEntry?.destination?.hierarchy?.any {
+                            it.route == navigationItem.screen.route
+                        } ?: false
 
-                    BottomNavigationBarItem(
-                        selected = selected, navigationItem = navigationItem
-                    ) {
-                        if (!selected) {
-                            navHostController.navigate(navigationItem.screen.route) {
-                                popUpTo(Screen.RemoteMusic.route) {
-                                    saveState = true
+                        BottomNavigationBarItem(
+                            selected = selected, navigationItem = navigationItem
+                        ) {
+                            if (!selected) {
+                                navHostController.navigate(navigationItem.screen.route) {
+                                    popUpTo(Screen.RemoteMusic.route) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
                         }
                     }
@@ -53,8 +59,19 @@ fun MainScreen() {
                 RemoteTracksScreenRoot(
                     navigateToPlayer = { trackId, sourceType ->
                         navHostController.navigate(
-                            Screen.Player.getRouteWithArgs(trackId, sourceType)
-                        )
+                            Screen.Player.getRouteWithArgs(
+                                trackId,
+                                sourceType
+                            )
+                        ) {
+                            popUpTo(Screen.Player.route) { inclusive = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+
+                    },
+                    onComposing = {
+                        isBottomNavigationEnabled = true
                     },
                     paddingValues = paddingValues,
                 )
@@ -63,8 +80,19 @@ fun MainScreen() {
                 LocalTracksScreenRoot(
                     navigateToPlayer = { trackId, sourceType ->
                         navHostController.navigate(
-                            Screen.Player.getRouteWithArgs(trackId, sourceType)
-                        )
+                            Screen.Player.getRouteWithArgs(
+                                trackId,
+                                sourceType
+                            )
+                        ) {
+                            popUpTo(Screen.Player.route) { inclusive = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+
+                    },
+                    onComposing = {
+                        isBottomNavigationEnabled = true
                     },
                     paddingValues = paddingValues,
                 )
@@ -73,6 +101,9 @@ fun MainScreen() {
                 PlayerScreenRoot(
                     trackId = trackId,
                     trackSourceType = trackSourceType,
+                    onComposing = {
+                        isBottomNavigationEnabled = false
+                    },
                     paddingValues = paddingValues,
                 )
             }
