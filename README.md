@@ -18,8 +18,8 @@
 **Скриншоты экрана:**
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="screenshots/Screenshot_local_tracks.png" alt="Screenshot" width="500"/>
-    <img src="screenshots/Screenshot_search_local.png" alt="Screenshot" width="500"/>
+    <img src="screenshots/Screenshot_local_tracks.png" alt="Screenshot" width="300"/>
+    <img src="screenshots/Screenshot_search_local.png" alt="Screenshot" width="300"/>
 </div>
 
 ---
@@ -31,8 +31,8 @@
 **Скриншоты экрана:**
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="screenshots/Screenshot_deezer.png" alt="Screenshot" width="500"/>
-  <img src="screenshots/Screenshot_search_deezer.png" alt="Screenshot" width="500"/>
+  <img src="screenshots/Screenshot_deezer.png" alt="Screenshot" width="300"/>
+  <img src="screenshots/Screenshot_search_deezer.png" alt="Screenshot" width="300"/>
 </div>
 
 ---
@@ -49,7 +49,7 @@
 **Скриншот экрана:**
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="screenshots/Screenshot_player.png" alt="Screenshot" width="500"/>
+  <img src="screenshots/Screenshot_player.png" alt="Screenshot" width="300"/>
 </div>
 
 ---
@@ -64,7 +64,7 @@
 **Скриншот уведомления:**
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="screenshots/Screenshot_deezer.png" alt="Screenshot" width="500"/>
+  <img src="screenshots/Screenshot_service_player.png" alt="Screenshot" width="300"/>
 </div>
 
 ---
