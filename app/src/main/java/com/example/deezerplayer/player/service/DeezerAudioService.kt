@@ -1,5 +1,7 @@
 package com.example.deezerplayer.player.service
 
+import android.app.ActivityManager
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -52,11 +54,21 @@ class DeezerAudioService : MediaSessionService() {
 
     companion object {
         fun start(context: Context) {
-            val intent = Intent(context, DeezerAudioService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
+            if (!isServiceRunning(context, DeezerAudioService::class.java)) {
+                val intent = Intent(context, DeezerAudioService::class.java)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            }
+        }
+
+        @Suppress("deprecation")
+        private fun isServiceRunning(context: Context, serviceClass: Class<out Service>): Boolean {
+            val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            return manager.getRunningServices(Int.MAX_VALUE).any {
+                it.service.className == serviceClass.name
             }
         }
     }
