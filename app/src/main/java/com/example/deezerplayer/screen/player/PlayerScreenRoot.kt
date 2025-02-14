@@ -72,7 +72,7 @@ fun PlayerScreenRoot(
     val screenState = viewModel.getScreenState().collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
+    LaunchedEffect(trackId) {
         DeezerAudioService.start(context)
         viewModel.onUiEvents(PlayerUIEvents.SelectedAudioChange(trackId))
     }
@@ -251,7 +251,7 @@ private fun DurationInfo(
             style = TextStyle(
                 fontFamily = nunitoFontFamily,
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                fontSize = 13.sp
             ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -262,7 +262,7 @@ private fun DurationInfo(
             style = TextStyle(
                 fontFamily = nunitoFontFamily,
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
+                fontSize = 13.sp
             ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

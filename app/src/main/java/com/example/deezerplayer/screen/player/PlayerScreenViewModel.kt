@@ -3,6 +3,7 @@ package com.example.deezerplayer.screen.player
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.example.deezerplayer.mapper.TrackUiMapper
@@ -73,7 +74,7 @@ class PlayerScreenViewModel @Inject constructor(
                             .toDuration(DurationUnit.SECONDS)
                             .inWholeMilliseconds
                             .toFloat()
-                        val seekPosition = ((durationMs * uiEvents.position) / PERCANTAGE).toLong()
+                        val seekPosition = ((durationMs * uiEvents.position) / PERCENTAGE).toLong()
                         audioServiceHandler.onPlayerEvents(
                             PlayerEvent.SeekTo,
                             seekPosition = seekPosition
@@ -156,7 +157,9 @@ class PlayerScreenViewModel @Inject constructor(
                 currentDurationString = formatDuration(currentProgressMillis),
                 currentProgress = getCurrentProgress(
                     currentDurationMillis = currentProgressMillis,
-                    totalDurationMillis = (currentState.track.durationSeconds * 1000f).toLong()
+                    totalDurationMillis = currentState.track.durationSeconds
+                        .toDuration(DurationUnit.SECONDS)
+                        .inWholeMilliseconds
                 )
             )
         }
@@ -164,7 +167,7 @@ class PlayerScreenViewModel @Inject constructor(
 
     private fun getCurrentProgress(currentDurationMillis: Long, totalDurationMillis: Long): Float {
         return if (currentDurationMillis > 0) {
-            ((currentDurationMillis.toFloat() / (totalDurationMillis.toFloat())) * PERCANTAGE)
+            ((currentDurationMillis.toFloat() / (totalDurationMillis.toFloat())) * PERCENTAGE)
         } else {
             INITIAL_PROGRESS
         }
@@ -178,6 +181,7 @@ class PlayerScreenViewModel @Inject constructor(
     }
 
     private fun formatDuration(durationMillis: Long): String {
+        if (durationMillis == C.TIME_UNSET) return CALCULATING_PROGRESS
         val minute = TimeUnit.MINUTES.convert(durationMillis, TimeUnit.MILLISECONDS)
         val seconds =
             TimeUnit.SECONDS.convert(durationMillis, TimeUnit.MILLISECONDS) % SECONDS_IN_MINUTE
@@ -207,7 +211,8 @@ class PlayerScreenViewModel @Inject constructor(
     }
 
     private companion object {
-        const val PERCANTAGE = 100f
+        const val CALCULATING_PROGRESS = "--:--"
+        const val PERCENTAGE = 100f
         const val INITIAL_PROGRESS = 0f
         const val SECONDS_IN_MINUTE = 60
     }
