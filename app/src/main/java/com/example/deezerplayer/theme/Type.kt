@@ -10,6 +10,8 @@ import com.example.deezerplayer.R
 
 val nunitoFontFamily = FontFamily(
     Font(R.font.nunito_regular, FontWeight.Normal),
+    Font(R.font.nunito_semibold, FontWeight.SemiBold),
+    Font(R.font.nunito_bold, FontWeight.Bold),
 )
 
 // Set of Material typography styles to start with

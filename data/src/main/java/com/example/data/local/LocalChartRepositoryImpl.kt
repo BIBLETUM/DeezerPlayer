@@ -12,6 +12,7 @@ import com.example.domain.repository.ChartRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class LocalChartRepositoryImpl @Inject constructor(
@@ -19,11 +20,19 @@ class LocalChartRepositoryImpl @Inject constructor(
     private val localTrackMapper: LocalTrackMapper,
 ) : ChartRepository {
 
-    private val _tracksFlow = MutableSharedFlow<List<Track>>(replay = 1)
+    private var lastTracksList: List<Track>? = null
+
+    private val _tracksFlow by lazy {
+        MutableSharedFlow<List<Track>>(replay = 1).apply {
+            val initialTracks = getMusicFiles().map { localTrackMapper.mapMusicFileToDomain(it) }
+            tryEmit(initialTracks)
+        }
+    }
 
     override fun getTracksFlow(): Flow<List<Track>> {
-        _tracksFlow.tryEmit(getMusicFiles().map { localTrackMapper.mapMusicFileToDomain(it) })
-        return _tracksFlow.asSharedFlow()
+        return _tracksFlow.asSharedFlow().onEach {
+            lastTracksList = it
+        }
     }
 
     override suspend fun searchTracks(query: String) {
@@ -36,8 +45,11 @@ class LocalChartRepositoryImpl @Inject constructor(
                 searchMusicFiles(query).map { localTrackMapper.mapMusicFileToDomain(it) }
             }
         }
-
         _tracksFlow.emit(filteredTracks)
+    }
+
+    override fun getLastTracksList(): List<Track> {
+        return lastTracksList?.toList() ?: throw IllegalStateException("Last tracks list is null")
     }
 
     private fun getMusicFiles(): List<MusicFile> {

@@ -1,7 +1,11 @@
 package com.example.deezerplayer.di
 
+import com.example.domain.use_case.GetLastLocalTracksListUseCase
+import com.example.domain.use_case.GetLastRemoteTracksListUseCase
 import com.example.domain.use_case.GetLocalTracksFlowUseCase
 import com.example.domain.use_case.GetRemoteTracksFlowUseCase
+import com.example.domain.use_case.IGetLastLocalTracksListUseCase
+import com.example.domain.use_case.IGetLastRemoteTracksListUseCase
 import com.example.domain.use_case.IGetLocalTracksFlowUseCase
 import com.example.domain.use_case.IGetRemoteTracksFlowUseCase
 import com.example.domain.use_case.ISearchLocalTracksUseCase
@@ -29,5 +33,13 @@ interface DomainModule {
     @ApplicationScope
     @Binds
     fun bindSearchLocalTracksUseCase(impl: SearchLocalTracksUseCase): ISearchLocalTracksUseCase
+
+    @ApplicationScope
+    @Binds
+    fun bindGetLastRemoteTracksListUseCase(impl: GetLastRemoteTracksListUseCase): IGetLastRemoteTracksListUseCase
+
+    @ApplicationScope
+    @Binds
+    fun bindGetLastLocalTracksListUseCase(impl: GetLastLocalTracksListUseCase): IGetLastLocalTracksListUseCase
 
 }

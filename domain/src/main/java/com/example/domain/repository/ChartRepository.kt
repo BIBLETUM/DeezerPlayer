@@ -9,4 +9,6 @@ interface ChartRepository {
 
     suspend fun searchTracks(query: String)
 
+    fun getLastTracksList(): List<Track>
+
 }

@@ -1,6 +1,5 @@
 package com.example.deezerplayer.screen.track_list.remote_tracks
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.deezerplayer.mapper.TrackUiMapper
@@ -51,10 +50,6 @@ class RemoteTracksViewModel @Inject constructor(
     }
 
     fun getScreenState(): StateFlow<RemoteTracksScreenState> = screenState
-
-    fun selectTrack(trackId: Long) {
-        Log.d("RemoteTracksViewModel", "selectTrack: $trackId")
-    }
 
     fun searchTracks(query: String) {
         _screenState.update {
