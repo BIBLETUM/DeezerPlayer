@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "DeezerPlayer"
 include(":app")
- 
+include(":data")
+include(":domain")
