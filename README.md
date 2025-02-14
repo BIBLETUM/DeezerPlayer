@@ -16,8 +16,11 @@
 - Поддерживает поиск по списку
 
 **Скриншоты экрана:**
-![Скриншот](screenshots/Screenshot_local_tracks.png)
-![Скриншот](screenshots/Screenshot_search_local.png)
+
+<div style="display: flex; justify-content: space-between;">
+    <img src="screenshots/Screenshot_local_tracks.png" alt="Screenshot" width="500"/>
+    <img src="screenshots/Screenshot_search_local.png" alt="Screenshot" width="500"/>
+</div>
 
 ---
 
@@ -25,9 +28,12 @@
 - Отображает популярные треки (Deezer API)
 - Позволяет искать треки (Deezer API)
 
-**Скриншот экрана:**
-![Скриншот](screenshots/Screenshot_deezer.png)
-![Скриншот](screenshots/Screenshot_search_deezer.png)
+**Скриншоты экрана:**
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="screenshots/Screenshot_deezer.png" alt="Screenshot" width="500"/>
+  <img src="screenshots/Screenshot_search_deezer.png" alt="Screenshot" width="500"/>
+</div>
 
 ---
 
@@ -41,7 +47,10 @@
   - Отображение текущего времени и длительности трека
 
 **Скриншот экрана:**
-![Скриншот](screenshots/Screenshot_player.png)
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="screenshots/Screenshot_player.png" alt="Screenshot" width="500"/>
+</div>
 
 ---
 
@@ -53,7 +62,10 @@
   - Перемотка треков
 
 **Скриншот уведомления:**
-![Скриншот](screenshots/Screenshot_service_player.png)
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="screenshots/Screenshot_deezer.png" alt="Screenshot" width="500"/>
+</div>
 
 ---
 
